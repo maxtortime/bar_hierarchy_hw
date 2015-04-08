@@ -5,5 +5,7 @@
 	<classpathentry kind="lib" path="D:/DOCUMENT/Workspace/FoxtailLib.jar"/>
 	<classpathentry kind="lib" path="D:/DOCUMENT/Workspace/json-org.jar"/>
 	<classpathentry kind="lib" path="D:/DOCUMENT/Workspace/processing_core.jar"/>
+	<classpathentry kind="lib" path="D:/DOCUMENT/Workspace/commons-lang3-3.3.2.jar"/>
+	<classpathentry kind="lib" path="D:/DOCUMENT/Workspace/commons-lang3-3.3.2-javadoc.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

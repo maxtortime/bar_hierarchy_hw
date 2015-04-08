@@ -4,6 +4,8 @@
 package bar_Hierarchy;
 
 import processing.core.PApplet;
+import org.apache.commons.lang3.*;
+import java.awt.Color;
 /**
  * @author Taehwan
  *
@@ -12,9 +14,14 @@ import processing.core.PApplet;
 
 public class HomeWork extends PApplet
 {
-	private int m[] = new int[]{80,160,0,160};
-	private float x,y;
-
+	public HomeWork() {
+		int m[] = new int[]{80,160,0,160}; // top right bottom left
+		int w = 1280- m[1] - m[3]; // width
+		int h = 800 - m[0] - m[2]; // height
+		Range<Integer> x = Range.between(0, w);
+		Range<Integer> z = Range.between(0x4682B4, 0xAAAAAA);
+	}
+	
 	public void setup() 
 	{
 		size(960,640);
