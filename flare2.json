@@ -1,12 +1,9 @@
 {
- "name": "flare",
- "children": [
+ "flare": [
   {
-   "name": "analytics",
-   "children": [
+   "analytics": [
     {
-     "name": "cluster",
-     "children": [
+     "cluster": [
       {"name": "AgglomerativeCluster", "size": 3938},
       {"name": "CommunityStructure", "size": 3812},
       {"name": "HierarchicalCluster", "size": 6714},
@@ -14,8 +11,7 @@
      ]
     },
     {
-     "name": "graph",
-     "children": [
+     "graph": [
       {"name": "BetweennessCentrality", "size": 3534},
       {"name": "LinkDistance", "size": 5731},
       {"name": "MaxFlowMinCut", "size": 7840},
@@ -24,21 +20,18 @@
      ]
     },
     {
-     "name": "optimization",
-     "children": [
+     "optimization": [
       {"name": "AspectRatioBanker", "size": 7074}
      ]
     }
    ]
   },
   {
-   "name": "animate",
-   "children": [
+   "animate": [
     {"name": "Easing", "size": 17010},
     {"name": "FunctionSequence", "size": 5842},
     {
-     "name": "interpolate",
-     "children": [
+     "interpolate": [
       {"name": "ArrayInterpolator", "size": 1983},
       {"name": "ColorInterpolator", "size": 2047},
       {"name": "DateInterpolator", "size": 1375},
@@ -62,11 +55,9 @@
    ]
   },
   {
-   "name": "data",
-   "children": [
+   "data": [
     {
-     "name": "converters",
-     "children": [
+     "converters": [
       {"name": "Converters", "size": 721},
       {"name": "DelimitedTextConverter", "size": 4294},
       {"name": "GraphMLConverter", "size": 9800},
@@ -83,8 +74,7 @@
    ]
   },
   {
-   "name": "display",
-   "children": [
+   "display": [
     {"name": "DirtySprite", "size": 8833},
     {"name": "LineSprite", "size": 1732},
     {"name": "RectSprite", "size": 3623},
@@ -92,14 +82,12 @@
    ]
   },
   {
-   "name": "flex",
-   "children": [
+   "flex": [
     {"name": "FlareVis", "size": 4116}
    ]
   },
   {
-   "name": "physics",
-   "children": [
+   "physics": [
     {"name": "DragForce", "size": 1082},
     {"name": "GravityForce", "size": 1336},
     {"name": "IForce", "size": 319},
@@ -111,8 +99,7 @@
    ]
   },
   {
-   "name": "query",
-   "children": [
+   "query": [
     {"name": "AggregateExpression", "size": 1616},
     {"name": "And", "size": 1027},
     {"name": "Arithmetic", "size": 3891},
@@ -132,8 +119,7 @@
     {"name": "Match", "size": 3748},
     {"name": "Maximum", "size": 843},
     {
-     "name": "methods",
-     "children": [
+     "methods": [
       {"name": "add", "size": 593},
       {"name": "and", "size": 330},
       {"name": "average", "size": 287},
@@ -181,8 +167,7 @@
    ]
   },
   {
-   "name": "scale",
-   "children": [
+   "scale": [
     {"name": "IScaleMap", "size": 2105},
     {"name": "LinearScale", "size": 1316},
     {"name": "LogScale", "size": 3151},
@@ -196,8 +181,7 @@
    ]
   },
   {
-   "name": "util",
-   "children": [
+   "util": [
     {"name": "Arrays", "size": 8258},
     {"name": "Colors", "size": 10001},
     {"name": "Dates", "size": 8217},
@@ -205,8 +189,7 @@
     {"name": "Filter", "size": 2324},
     {"name": "Geometry", "size": 10993},
     {
-     "name": "heap",
-     "children": [
+     "heap": [
       {"name": "FibonacciHeap", "size": 9354},
       {"name": "HeapNode", "size": 1233}
      ]
@@ -215,8 +198,7 @@
     {"name": "IPredicate", "size": 383},
     {"name": "IValueProxy", "size": 874},
     {
-     "name": "math",
-     "children": [
+     "math": [
       {"name": "DenseMatrix", "size": 3165},
       {"name": "IMatrix", "size": 2815},
       {"name": "SparseMatrix", "size": 3366}
@@ -225,8 +207,7 @@
     {"name": "Maths", "size": 17705},
     {"name": "Orientation", "size": 1486},
     {
-     "name": "palette",
-     "children": [
+     "palette": [
       {"name": "ColorPalette", "size": 6367},
       {"name": "Palette", "size": 1229},
       {"name": "ShapePalette", "size": 2059},
@@ -241,8 +222,7 @@
    ]
   },
   {
-   "name": "vis",
-   "children": [
+   "vis": [
     {
      "name": "axis",
      "children": [
@@ -254,8 +234,7 @@
      ]
     },
     {
-     "name": "controls",
-     "children": [
+     "controls": [
       {"name": "AnchorControl", "size": 2138},
       {"name": "ClickControl", "size": 3824},
       {"name": "Control", "size": 1353},
@@ -270,16 +249,14 @@
      ]
     },
     {
-     "name": "data",
-     "children": [
+     "data": [
       {"name": "Data", "size": 20544},
       {"name": "DataList", "size": 19788},
       {"name": "DataSprite", "size": 10349},
       {"name": "EdgeSprite", "size": 3301},
       {"name": "NodeSprite", "size": 19382},
       {
-       "name": "render",
-       "children": [
+       "render": [
         {"name": "ArrowType", "size": 698},
         {"name": "EdgeRenderer", "size": 5569},
         {"name": "IRenderer", "size": 353},
@@ -292,8 +269,7 @@
      ]
     },
     {
-     "name": "events",
-     "children": [
+     "events": [
       {"name": "DataEvent", "size": 2313},
       {"name": "SelectionEvent", "size": 1880},
       {"name": "TooltipEvent", "size": 1701},
@@ -301,27 +277,23 @@
      ]
     },
     {
-     "name": "legend",
-     "children": [
+     "legend": [
       {"name": "Legend", "size": 20859},
       {"name": "LegendItem", "size": 4614},
       {"name": "LegendRange", "size": 10530}
      ]
     },
     {
-     "name": "operator",
-     "children": [
+     "operator": [
       {
-       "name": "distortion",
-       "children": [
+       "distortion": [
         {"name": "BifocalDistortion", "size": 4461},
         {"name": "Distortion", "size": 6314},
         {"name": "FisheyeDistortion", "size": 3444}
        ]
       },
       {
-       "name": "encoder",
-       "children": [
+       "encoder": [
         {"name": "ColorEncoder", "size": 3179},
         {"name": "Encoder", "size": 4060},
         {"name": "PropertyEncoder", "size": 4138},
@@ -330,8 +302,7 @@
        ]
       },
       {
-       "name": "filter",
-       "children": [
+       "filter": [
         {"name": "FisheyeTreeFilter", "size": 5219},
         {"name": "GraphDistanceFilter", "size": 3165},
         {"name": "VisibilityFilter", "size": 3509}
@@ -339,8 +310,7 @@
       },
       {"name": "IOperator", "size": 1286},
       {
-       "name": "label",
-       "children": [
+       "label": [
         {"name": "Labeler", "size": 9956},
         {"name": "RadialLabeler", "size": 3899},
         {"name": "StackedAreaLabeler", "size": 3202}
