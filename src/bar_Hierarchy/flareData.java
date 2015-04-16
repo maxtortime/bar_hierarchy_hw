@@ -1,5 +1,7 @@
 package bar_Hierarchy;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 import java.util.Vector;
 
@@ -28,9 +30,24 @@ public class FlareData {
 		}
 	}
 	
-	private void calSum(JSONObject obj, String name) 
+	private void calSum(JSONObject obj, String name) throws JSONException 
 	{
-		//if(obj.has("children"))
+		int sum = 0;
+		
+		if(!obj.has("children"))
+			sum += dfs.pop().getInt("size");
+		else 
+		{
+			int i = 0;
+			
+			do {
+				dfs.push(obj.getJSONArray("children").getJSONObject(i));
+				i++;
+			}
+			while (obj.getJSONArray("children").getJSONObject(i).getString("name")!=name);
+			
+			dfs.pop();
+		}
 	}
 	
 	public int sum(int d1)
