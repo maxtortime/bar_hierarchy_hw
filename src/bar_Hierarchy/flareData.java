@@ -17,38 +17,52 @@ import org.json.JSONObject;
 public class FlareData {
 	private String jsonFile;
 	private JSONObject obj;
-	private Stack<JSONObject> dfs = new Stack<JSONObject>();
+	private Vector<JSONObject> allObject = new Vector<JSONObject>();
+	private static final String CHILDREN = "children";
+	private static final String NAME = "name";
+	private static final String SIZE = "size";
+	private Stack<JSONObject> sumStack =  new Stack<JSONObject>();
+	private int sum = 0;
 	
 	public FlareData(String fileName)
 	{
 		jsonFile = FTFile.Read(fileName);
 		try {
 			obj = new JSONObject(jsonFile);
+			allObject.addElement(obj);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
-	private void calSum(JSONObject obj, String name) throws JSONException 
-	{
-		int sum = 0;
-		
-		if(!obj.has("children"))
-			sum += dfs.pop().getInt("size");
-		else 
-		{
-			int i = 0;
+	public Vector<JSONObject> getVec() {
+		return allObject;
+	}
+	
+	public void dfs(JSONObject object,int index) throws JSONException {
+		if(object.has(CHILDREN)) {
+			System.out.println("DOWN "+index);
+			JSONObject downObject = object.getJSONArray(CHILDREN).getJSONObject(index);
+			sumStack.push(downObject);
+			allObject.addElement(downObject);
+			dfs(downObject,0);
+		}
+		else {
+			sumStack.pop(); // 이 시점에서 자식 노드가 없는 상황이므로 한 번 팝을 해줘야 상위노드로 감
+			System.out.println("UP");
+			JSONArray temp = sumStack.pop().getJSONArray(CHILDREN);
 			
-			do {
-				dfs.push(obj.getJSONArray("children").getJSONObject(i));
-				i++;
+			for (int i=0; i < temp.length() ; i++ ) {
+				allObject.addElement(temp.getJSONObject(i));
+				System.out.println("SUM"+i);
+				sum += temp.getJSONObject(i).getInt(SIZE);
 			}
-			while (obj.getJSONArray("children").getJSONObject(i).getString("name")!=name);
 			
-			dfs.pop();
+			dfs(sumStack.pop(),index+1);
 		}
 	}
+	
 	
 	public int sum(int d1)
 	{
