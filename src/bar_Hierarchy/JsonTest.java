@@ -10,23 +10,19 @@ public class JsonTest {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		String s = "./flare.json";
+		String s = "./newFlare.json";
 		FlareData json = new FlareData(s);
+		json.sumStack.push(json.getObject());
 		
+		System.out.println(json.sum);
 		try {
-			json.dfs(json.getObject(), 0);
+			json.dfs(json.getObject());
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		for (int i = 0 ; i<json.getVec().size() ; i++)
-			try {
-				System.out.println(json.getVec().get(i).getString("name"));
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		
 	}
 
 }

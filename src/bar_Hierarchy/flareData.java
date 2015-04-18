@@ -21,48 +21,64 @@ public class FlareData {
 	private static final String CHILDREN = "children";
 	private static final String NAME = "name";
 	private static final String SIZE = "size";
-	private Stack<JSONObject> sumStack =  new Stack<JSONObject>();
-	private int sum = 0;
+	public Stack<JSONObject> sumStack =  new Stack<JSONObject>();
+	public int sum = 0;
+	private HashMap <String,Boolean> visited = new HashMap<String,Boolean>();
+	private int idx = 0;
 	
 	public FlareData(String fileName)
 	{
 		jsonFile = FTFile.Read(fileName);
+		visited.put("flare", false);
 		try {
 			obj = new JSONObject(jsonFile);
-			allObject.addElement(obj);
+			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	}
 	
-	public Vector<JSONObject> getVec() {
-		return allObject;
-	}
-	
-	public void dfs(JSONObject object,int index) throws JSONException {
+	public void dfs(JSONObject object) throws JSONException {
+		if(sumStack.peek() != object)
+			sumStack.push(object).getString(NAME);
+		
 		if(object.has(CHILDREN)) {
-			System.out.println("DOWN "+index);
-			JSONObject downObject = object.getJSONArray(CHILDREN).getJSONObject(index);
-			sumStack.push(downObject);
-			allObject.addElement(downObject);
-			dfs(downObject,0);
-		}
-		else {
-			sumStack.pop(); // 이 시점에서 자식 노드가 없는 상황이므로 한 번 팝을 해줘야 상위노드로 감
-			System.out.println("UP");
-			JSONArray temp = sumStack.pop().getJSONArray(CHILDREN);
+			JSONArray arr = object.getJSONArray(CHILDREN);
 			
-			for (int i=0; i < temp.length() ; i++ ) {
-				allObject.addElement(temp.getJSONObject(i));
-				System.out.println("SUM"+i);
-				sum += temp.getJSONObject(i).getInt(SIZE);
+			for (int i = 0; i<arr.length() ; i++) {
+				String curName = arr.getJSONObject(i).getString(NAME);
+				
+				if(visited.containsKey(curName)) {
+					if(visited.get(curName)) {
+						this.idx=i+1;
+					}
+				}
 			}
 			
-			dfs(sumStack.pop(),index+1);
+			if (this.idx == arr.length()) {
+				JSONObject up = sumStack.pop();
+				System.out.println(up.getString(NAME));
+				dfs(sumStack.pop());
+			}
+			
+			JSONObject down = arr.getJSONObject(idx);
+			visited.put(down.getString(NAME), true);
+			dfs(down);
+		}
+		else {
+			JSONObject poped= sumStack.pop();
+			System.out.println("pop "+poped.getString(NAME));
+			
+			this.sum+=poped.getInt(SIZE);
+			//System.out.println(poped.getInt(SIZE));
+			
+			visited.put(poped.getString(NAME),true);
+			
+			dfs(sumStack.peek());		
 		}
 	}
-	
 	
 	public int sum(int d1)
 	{
@@ -174,5 +190,10 @@ public class FlareData {
 			e.printStackTrace();
 		}
 		return length;
+	}
+
+	public Vector<JSONObject> getVec() {
+		// TODO Auto-generated method stub
+		return allObject;
 	}
 }
