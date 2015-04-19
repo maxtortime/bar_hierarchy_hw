@@ -72,7 +72,6 @@ public class FlareData {
 			System.out.println("pop "+poped.getString(NAME));
 			
 			this.sum+=poped.getInt(SIZE);
-			//System.out.println(poped.getInt(SIZE));
 			
 			visited.put(poped.getString(NAME),true);
 			
