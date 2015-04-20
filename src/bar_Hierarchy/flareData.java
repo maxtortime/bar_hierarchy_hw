@@ -1,8 +1,10 @@
 package bar_Hierarchy;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.EmptyStackException;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Stack;
+import java.util.TreeMap;
 import java.util.Vector;
 
 import net.foxtail.file.FTFile;
@@ -17,21 +19,20 @@ import org.json.JSONObject;
 public class FlareData {
 	private String jsonFile;
 	private JSONObject obj;
-	private Vector<JSONObject> allObject = new Vector<JSONObject>();
-	private static final String CHILDREN = "children";
-	private static final String NAME = "name";
-	private static final String SIZE = "size";
-	public Stack<JSONObject> sumStack =  new Stack<JSONObject>();
-	public int sum = 0;
-	private HashMap <String,Boolean> visited = new HashMap<String,Boolean>();
-	private int idx = 0;
+	private final String CHILDREN = "children";
+	private final String NAME = "name";
+	private final String SIZE = "size";
+	private Stack<JSONObject> s =  new Stack<JSONObject>();
+	private LinkedHashMap <String,Integer> each = new LinkedHashMap<String,Integer>();
+	private Vector <JSONObject> nodes = new Vector<JSONObject>();
 	
 	public FlareData(String fileName)
 	{
 		jsonFile = FTFile.Read(fileName);
-		visited.put("flare", false);
+		
 		try {
 			obj = new JSONObject(jsonFile);
+			s.push(obj);
 			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -40,159 +41,106 @@ public class FlareData {
 		
 	}
 	
-	public void dfs(JSONObject object) throws JSONException {
-		if(sumStack.peek() != object)
-			sumStack.push(object).getString(NAME);
-		
-		if(object.has(CHILDREN)) {
-			JSONArray arr = object.getJSONArray(CHILDREN);
-			
-			for (int i = 0; i<arr.length() ; i++) {
-				String curName = arr.getJSONObject(i).getString(NAME);
-				
-				if(visited.containsKey(curName)) {
-					if(visited.get(curName)) {
-						this.idx=i+1;
-					}
-				}
-			}
-			
-			if (this.idx == arr.length()) {
-				JSONObject up = sumStack.pop();
-				System.out.println(up.getString(NAME));
-				dfs(sumStack.pop());
-			}
-			
-			JSONObject down = arr.getJSONObject(idx);
-			visited.put(down.getString(NAME), true);
-			dfs(down);
-		}
-		else {
-			JSONObject poped= sumStack.pop();
-			System.out.println("pop "+poped.getString(NAME));
-			
-			this.sum+=poped.getInt(SIZE);
-			
-			visited.put(poped.getString(NAME),true);
-			
-			dfs(sumStack.peek());		
-		}
+	public FlareData(JSONObject object) {
+		this.obj = object;
+		this.s.push(object);
 	}
 	
-	public int sum(int d1)
-	{
-		int sum = 0;
+	public int sum() throws JSONException {
+		dfs(this.obj);
 		
-		for (int i = 0 ; i < this.lenArray(d1) ; i++)
-			for(int j = 0 ; j < this.lenArray(d1, i) ; j++)
-				try {
-					sum += this.getObject(d1, i, j).getInt("size");
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+		int sum = 0;
+		Iterator<String> it = this.each.keySet().iterator(); // Iterator 로 Key들을 뽑아낸다 
+
+	    Object obj;
+	    while (it.hasNext()) {  // Key를 뽑아낸 Iterator 를 돌려가며
+	      obj = it.next(); // Key 를 하나씩 뽑아
+	      sum += this.each.get(obj);
+	    }
 		
 		return sum;
 	}
 	
-	public JSONObject get(int d) throws JSONException
-	{
-		
-		if (d==0)
-			return obj;
-		else 
-			return get(d-1).getJSONArray("children").getJSONObject(d);
-	}
-	
-	
-	public JSONObject getObject(int d1,int d2, int d3)
-	{
-		JSONObject result = new JSONObject();
-		
+	private void dfs(JSONObject object) throws JSONException {
 		try {
-			result = obj.getJSONArray("children").getJSONObject(d1).getJSONArray("children").getJSONObject(d2).getJSONArray("children").getJSONObject(d3);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			if(object.has(CHILDREN)) {
+				int idx = 0;
+				
+				JSONArray arr = object.getJSONArray(CHILDREN);
+				
+				for (int i = 0; i < arr.length() ; i++ ) {
+					JSONObject cur = arr.getJSONObject(i);
+					String name = cur.getString(NAME);
+					
+					if (each.containsKey(name)) {
+						idx = i+1;
+					}
+					else if(i == 0 && !each.containsKey(name)) {
+						break;
+					}
+				}
+				
+				if (idx == arr.length()) { 
+					// 만약 object의 배열을 전부 한 번씩 들렀다면 상위 노드로 올라가기 위해
+					s.pop();
+					
+					dfs(s.peek());
+				}
+				else {
+					// 위의 for 문에서 결정해준 값을 스택에 넣고 다시 dfs 수행
+					s.push(arr.getJSONObject(idx));
+					
+					JSONObject cur = s.peek();
+					String name = cur.getString(NAME);
+					
+					if (cur.has(SIZE)) {
+						int size = cur.getInt(SIZE);
+						this.each.put(name, size);
+					}
+					else {
+						this.each.put(name, 0);
+					}
+					nodes.addElement(cur);
+					dfs(cur);
+				}
+			}
+			else {
+				s.pop();
+				
+				dfs(s.peek());
+			}
 		}
-		
-		return result;
-	}
-	
-	public JSONObject getObject(int d1,int d2)
-	{
-		JSONObject result = new JSONObject();
-		
-		try {
-			result = obj.getJSONArray("children").getJSONObject(d1).getJSONArray("children").getJSONObject(d2);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-		
-		return result;
-	}
-	
-	public JSONObject getObject(int d1)
-	{
-		JSONObject result = new JSONObject();
-		
-		try {
-			result = obj.getJSONArray("children").getJSONObject(d1);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		catch(EmptyStackException e) {
+			// Depth First Search ends...
+			// do nothing
 		}
-		return result;
-	}
-	
-	public JSONObject getObject()
-	{
-		//to get upper object
-		return obj;
-	}
-	
-	public int lenArray() // for 문으로 데이터를 받기 위해 사이즈르 알아야 하므로
-	{
-		int length = 0;
-		try {
-			length = obj.getJSONArray("children").length();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return length;
-	}
-	
-	public int lenArray(int d1) // for 문으로 데이터를 받기 위해 사이즈르 알아야 하므로
-	{
-		int length = 0;
-		try {
-			length = obj.getJSONArray("children").getJSONObject(d1)
-					.getJSONArray("children").length();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return length;
-	}
-	
-	public int lenArray(int d1,int d2) // for 문으로 데이터를 받기 위해 사이즈르 알아야 하므로
-	{
-		int length = 0;
-		try {
-			length = obj.getJSONArray("children").getJSONObject(d1)
-					.getJSONArray("children").getJSONObject(d2)
-					.getJSONArray("children").length();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return length;
 	}
 
-	public Vector<JSONObject> getVec() {
-		// TODO Auto-generated method stub
-		return allObject;
+	/**
+	 * @return the obj
+	 */
+	public JSONObject getObj() {
+		return obj;
 	}
+
+	/**
+	 * @param obj the obj to set
+	 */
+	public void changeObj(JSONObject obj) {
+		this.obj = obj;
+	}
+
+	/**
+	 * @return the each
+	 * @throws JSONException 
+	 */
+	public LinkedHashMap<String, Integer> getEach() throws JSONException {
+		dfs(this.obj);
+		return each;
+	}
+
+	/**
+	 * @param each the each to set
+	 */
+	
 }
