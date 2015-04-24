@@ -18,6 +18,7 @@ public class FlareData {
 	private String jsonFile;
 	private JSONObject obj;
 	private Stack<JSONObject> dfs = new Stack<JSONObject>();
+	private Stack<JSONObject> sumStack = new Stack<JSONObject>();
 	
 	public FlareData(String fileName)
 	{
@@ -47,6 +48,12 @@ public class FlareData {
 			while (obj.getJSONArray("children").getJSONObject(i).getString("name")!=name);
 			
 			dfs.pop();
+		}
+	}
+	
+	public void dfs(JSONObject obj, int index) throws JSONException {
+		while(obj.has("children")) { 
+			sumStack.push(obj.getJSONArray("children").getJSONObject(0));
 		}
 	}
 	
