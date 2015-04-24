@@ -7,6 +7,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Stack;
+import java.util.Vector;
+
+import net.foxtail.file.FTFile;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,49 +25,46 @@ import processing.core.PApplet;
 
 public class HomeWork extends PApplet
 {	
-	static FlareData json = new FlareData("../flare.json");
-	
-	
-	Integer[] sizeEach =  new Integer[json.lenArray()];
-	HashMap<Integer,String> map = new HashMap<Integer,String>();
+	static Vector<Integer> sum = new Vector<Integer>();
 	
 	public void setup()
 	{
-		size(960,480);
+		size(640,480);
+		String s = FTFile.Read("../flare.json");
+		JSONObject obj;
+		try {
+			obj = new JSONObject(s);
 		
-		for (int i = 0 ; i<json.lenArray() ; i++)
-		{
-			sizeEach[i] = json.sum(i);
+			JSONArray depth1 = obj.getJSONArray("children");
 			
-			try {
-				map.put(sizeEach[i],json.getObject(i).getString("name"));
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			for (int i = 0; i < depth1.length() ; i++) {
+				FlareData d = new FlareData(depth1.getJSONObject(i));
+				sum.addElement(d.sum());
 			}
-			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		Arrays.sort(sizeEach, Collections.reverseOrder());
-		
+		sum.sort(Collections.reverseOrder());
 	}
 
 	public void draw()
 	{
 		int y=0;
 		
-		for(int i=0;i<sizeEach.length;i++)
+		for(int i=0;i<sum.size();i++)
 		{  
 			textSize(12);
-			
+		
 			if(mouseY>y && mouseY<=y+40) 
 				fill(0,0,255);
 			else
 				fill(50);
-			
-		    float w = map(sizeEach[i], 4000,450000,80,width);
+	
+		    float w = map(sum.get(i), 0,500000,10,400);
 
 		    rect(80,y+10,w,32);
-		    text(map.get(sizeEach[i]),10,y+25);
+		    //text(,10,y+25);
 		     
 		    y+=40;
 		}  
