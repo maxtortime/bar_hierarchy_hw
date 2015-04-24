@@ -3,10 +3,8 @@
  */
 package bar_Hierarchy;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Stack;
+import java.util.LinkedHashMap;
 import java.util.Vector;
 
 import net.foxtail.file.FTFile;
@@ -32,6 +30,7 @@ public class HomeWork extends PApplet
 		size(640,480);
 		String s = FTFile.Read("../flare.json");
 		JSONObject obj;
+		
 		try {
 			obj = new JSONObject(s);
 		
