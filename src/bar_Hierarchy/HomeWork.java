@@ -26,6 +26,7 @@ public class HomeWork extends PApplet
 {	
 	static Vector<Integer> sum = new Vector<Integer>();
 	static TreeMap<Integer,String> sumTree = new TreeMap<Integer,String>(Collections.reverseOrder());
+	static TreeMap<Integer,JSONObject> objTree = new TreeMap<Integer,JSONObject>();
 	
 	public void setup()
 	{
@@ -40,7 +41,8 @@ public class HomeWork extends PApplet
 			
 			for (int i = 0; i < depth1.length() ; i++) {
 				FlareData d = new FlareData(depth1.getJSONObject(i));
-				sumTree.put(d.sum(), d.getObj().getString("name"));
+				//sumTree.put(d.sum(), d.getObj().getString("name"));
+				objTree.put(d.sum(), d.getObj());
 			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -52,12 +54,20 @@ public class HomeWork extends PApplet
 	{
 		int y=0;
 		
-		for(Entry<Integer,String> entry : sumTree.entrySet())
+		for(Entry<Integer, JSONObject> entry : objTree.entrySet())
 		{  
 			textSize(12);
 		
 			if(mouseY>y && mouseY<=y+40) { 
 				fill(0,0,255);
+				try {
+					for (int i = 0 ; i<entry.getValue().getJSONArray("children").length() ; i++) {
+						FlareData d2 = new FlareData(entry.getValue().getJSONArray("children").getJSONObject(i));
+											}
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				// 다음 depth ㅢ 합계 출력
 			}
 			else {
@@ -69,7 +79,13 @@ public class HomeWork extends PApplet
 		    float w = map(entry.getKey(), 0,500000,10,400);
 
 		    rect(80,y+10,w,32);
-		    text(entry.getValue(),10,y+25);
+		    
+		    try {
+				text(entry.getValue().getString("name"),10,y+25);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		     
 		    y+=40;
 		}  
