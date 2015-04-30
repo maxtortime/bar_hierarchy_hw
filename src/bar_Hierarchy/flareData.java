@@ -24,6 +24,7 @@ public class FlareData {
 	private Stack<JSONObject> s =  new Stack<JSONObject>();
 	private LinkedHashMap <String,Integer> each = new LinkedHashMap<String,Integer>();
 	private Vector <JSONObject> nodes = new Vector<JSONObject>();
+
 	
 	public FlareData(String fileName)
 	{
@@ -45,6 +46,7 @@ public class FlareData {
 		this.s.push(object);
 	}
 	
+
 	public int sum() throws JSONException {
 		dfs(this.obj);
 		
