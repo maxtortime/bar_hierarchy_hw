@@ -9,9 +9,8 @@ public class JsonTest {
 		
 		String s = "./flare.json";
 		FlareData json = new FlareData(s);
-		FlareData j = new FlareData(json.getObj().getJSONArray("children").getJSONObject(0));
+		FlareData j = new FlareData(json.getObj().getJSONArray("children").getJSONObject(1).getJSONArray("children").getJSONObject(0));
 		System.out.println(j.sum());
-		
 		
 	}
 

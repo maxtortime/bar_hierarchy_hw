@@ -3,6 +3,7 @@
  */
 package bar_Hierarchy;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.TreeMap;
@@ -24,32 +25,34 @@ import processing.core.PApplet;
 
 public class HomeWork extends PApplet
 {	
-	static Vector<Integer> sum = new Vector<Integer>();
-	static HashMap<String,Integer> sumTree = new HashMap<String,Integer>();
-	static TreeMap<String, JSONObject> objTree = new TreeMap<String,JSONObject>();
-	static ValueComparator bvc = new ValueComparator(sumTree);
-	static TreeMap<String,Integer> sorted_map = new TreeMap<String, Integer>(bvc);
+	HashMap<String,Integer> sumTree = new HashMap<String,Integer>();
+	
+	ValueComparator bvc = new ValueComparator(sumTree);
+	
+	TreeMap<String,Integer> sorted_map = new TreeMap<String, Integer>(bvc);
+	TreeMap<String,Integer> before_sorted_map = new TreeMap<String, Integer>();
+	
+	Vector<Integer> rectY = new Vector<Integer>();
+	Vector<Integer> rectWidth = new Vector<Integer>();
+	Vector<String> rectName = new Vector<String>();
 	
 	boolean rectOver,buttonOver;
 	int rectHighlight, buttonHighlight;
 	int rectX;
-	Vector<Integer> rectY = new Vector<Integer>();
-	Vector<Integer> rectWidth = new Vector<Integer>();
-	Vector<String> rectName = new Vector<String>();
 	int rectHeight;
 	int rectColor;
 	int baseColor;
 	int currentColor;
 	
-	JSONArray depth1;
+	JSONArray curDepth;
 	
 	public void setup()
 	{
-		size(640,480);
+		size(1024,860);
 		textSize(12);
-
+		background(255);
+		
 		rectX = 80;
-		rectY.add(0);
 		rectHeight = 32;
 		rectHighlight = color(0,0,255);
 		rectColor = color(0,0,0);
@@ -63,52 +66,81 @@ public class HomeWork extends PApplet
 		
 		try {
 			obj = new JSONObject(s);
-		
-			depth1 = obj.getJSONArray("children");
-			
-			for (int i = 0; i < depth1.length() ; i++) {
-				FlareData d = new FlareData(depth1.getJSONObject(i));
-				sumTree.put(d.getObj().getString("name"),d.sum());
-				objTree.put(d.getObj().getString("name"),d.getObj());
-			}
+			curDepth = obj.getJSONArray("children");
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		sorted_map.putAll(sumTree);
-		
-		for (Entry<String, Integer> entry : sorted_map.entrySet()) {
-			rectWidth.add((int) map(entry.getValue(),0,500000,10,400));
-			rectName.add(entry.getKey());
-			
-			rectY.add(rectY.lastElement()+40);
-		}
-		
-		noLoop();
+		makeMap(curDepth);
 	}
 
 	public void draw()
 	{
-		
 		for (int i = 0 ; i < sorted_map.size() ; i++) {
-			if(mouseY>rectY.get(i) && mouseY<=rectY.get(i)+40 && mouseX <= rectWidth.get(i)) {
-				
-				fill(255,40,40);
+			fill(0);
+			
+			if(mouseY>rectY.get(i) && mouseY<=rectY.get(i)+40 && mouseX <= rectWidth.get(i) && mousePressed == true) {
+				nextDepth(i);
+				break;
 			}
-			else {
-				fill(50);
-			}
+			
 			rect(rectX,rectY.get(i)+10,rectWidth.get(i),rectHeight);
 			text(rectName.get(i),10,rectY.get(i)+25);
 		}
 	}
-	
-	public void mousePressed() {
-		  loop();  // Holding down the mouse activates looping
+	 
+	private void nextDepth(int idx) {
+		String keys[] = sorted_map.keySet().toArray(new String[0]);
+		
+		for (int i = 0; i < curDepth.length() ; i++) {
+			try {
+				if (curDepth.getJSONObject(i).getString("name") == keys[idx]) {
+					makeMap(curDepth.getJSONObject(i).getJSONArray("children"));
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-	
-	public void mouseReleased() {
-		  noLoop();  // Releasing the mouse stops looping draw()
+		
+		background(255);
+		redraw();
+	}
+
+	private void makeMap(JSONArray arr) {
+		sumTree.clear();
+		
+		for (int i = 0; i < arr.length() ; i++) {
+			try {
+				FlareData d = new FlareData(arr.getJSONObject(i));
+				sumTree.put(d.getObj().getString("name"),d.sum());
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		
+		before_sorted_map.putAll(sorted_map);
+		
+		sorted_map.clear();
+		sorted_map.putAll(sumTree);
+		
+		rectWidth.clear();
+		rectName.clear();
+		rectY.clear();
+		
+		rectY.add(0);
+		
+		final int MIN = Collections.min(sorted_map.values());
+		final int MAX = Collections.max(sorted_map.values());
+		
+		for (Entry<String, Integer> entry : sorted_map.entrySet()) {
+			rectWidth.add((int) map(entry.getValue(),MIN,MAX,(width-200)/20,width-200));
+			rectName.add(entry.getKey());
+			
+			rectY.add(rectY.lastElement()+40);
+		}
+	}
+	
 }
