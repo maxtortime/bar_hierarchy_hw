@@ -4,7 +4,6 @@ import java.util.EmptyStackException;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Stack;
-import java.util.TreeMap;
 import java.util.Vector;
 
 import net.foxtail.file.FTFile;
@@ -52,13 +51,19 @@ public class FlareData {
 		dfs(this.obj);
 		
 		int sum = 0;
-		Iterator<String> it = this.each.keySet().iterator(); // Iterator 로 Key들을 뽑아낸다 
-
-	    Object obj;
-	    while (it.hasNext()) {  // Key를 뽑아낸 Iterator 를 돌려가며
-	      obj = it.next(); // Key 를 하나씩 뽑아
-	      sum += this.each.get(obj);
-	    }
+		
+		if (!each.isEmpty()) {
+			Iterator<String> it = this.each.keySet().iterator(); // Iterator 로 Key들을 뽑아낸다 
+	
+		    Object obj;
+		    while (it.hasNext()) {  // Key를 뽑아낸 Iterator 를 돌려가며
+		      obj = it.next(); // Key 를 하나씩 뽑아
+		      sum += this.each.get(obj);
+		    }
+		}
+		else {
+			sum = obj.getInt(SIZE);
+		}
 		
 		return sum;
 	}
