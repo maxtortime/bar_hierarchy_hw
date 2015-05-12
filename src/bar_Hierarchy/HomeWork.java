@@ -37,7 +37,7 @@ public class HomeWork extends PApplet
 		try {
 			obj = new JSONObject(s);
 		
-			JSONArray depth1 = obj.getJSONArray("children").getJSONObject(0).getJSONArray("children");
+			JSONArray depth1 = obj.getJSONArray("children");
 			
 			for (int i = 0; i < depth1.length() ; i++) {
 				FlareData d = new FlareData(depth1.getJSONObject(i));
