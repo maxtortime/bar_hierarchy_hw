@@ -47,6 +47,16 @@ public class FlareData {
 	}
 	
 
+	public FlareData(JSONArray arr, int idx) {
+		try {
+			this.obj = arr.getJSONObject(idx);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.s.push(this.obj);
+	}
+
 	public int sum() throws JSONException {
 		dfs(this.obj);
 		
