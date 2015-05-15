@@ -79,25 +79,35 @@ public class HomeWork extends PApplet
 	public void draw()
 	{
 		for (int i = 0 ; i < sorted_map.size() ; i++) {
-			fill(0);
+			fill(0,0,255);
 			
 			if(mouseY>rectY.get(i) && mouseY<=rectY.get(i)+40 && mouseX <= rectWidth.get(i) && mousePressed == true) {
-				nextDepth(i);
+				if(nextDepth(i) == null) {
+					
+				}
+				else {
+					curDepth = nextDepth(i);
+				}
 				break;
 			}
-			
+		
 			rect(rectX,rectY.get(i)+10,rectWidth.get(i),rectHeight);
 			text(rectName.get(i),10,rectY.get(i)+25);
 		}
+		
+		 
 	}
+	
 	 
-	private void nextDepth(int idx) {
+	private JSONArray nextDepth(int idx) {
 		String keys[] = sorted_map.keySet().toArray(new String[0]);
+		JSONArray nextDepth = null;
 		
 		for (int i = 0; i < curDepth.length() ; i++) {
 			try {
 				if (curDepth.getJSONObject(i).getString("name") == keys[idx]) {
-					makeMap(curDepth.getJSONObject(i).getJSONArray("children"));
+					nextDepth = curDepth.getJSONObject(i).getJSONArray("children");
+					makeMap(nextDepth);
 				}
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -107,6 +117,8 @@ public class HomeWork extends PApplet
 		
 		background(255);
 		redraw();
+		
+		return nextDepth;
 	}
 
 	private void makeMap(JSONArray arr) {
