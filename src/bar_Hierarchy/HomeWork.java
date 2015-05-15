@@ -56,12 +56,13 @@ public class HomeWork extends PApplet
 		
 		for (int i = 0 ; i< rects.size() ; i++) {
 			rects.get(i).display(this);
+		}
 	}
 	
 	public void mousePressed() {
 		redraw();
 		
-		return nextDepth;
+	
 	}
 	
 	private JSONArray nextDraw(JSONArray nD) {

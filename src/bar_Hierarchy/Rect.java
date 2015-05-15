@@ -98,5 +98,4 @@ public class Rect extends FlareData {
 		
 		p.rect(r.x,r.y,r.width,r.height);
 	}
->>>>>>> origin/Rect_Class
 }
