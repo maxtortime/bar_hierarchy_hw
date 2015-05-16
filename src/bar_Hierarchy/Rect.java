@@ -4,12 +4,13 @@ import java.util.TreeMap;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import processing.core.PApplet;
 
 import java.awt.Rectangle;
 
-public class Rect extends FlareData {
+public class Rect {
 	private final int x,h;
 	private int MIN;
 	private int MAX;
@@ -21,43 +22,50 @@ public class Rect extends FlareData {
 	private TreeMap<String,Integer> nameSum = new TreeMap<String, Integer>();
 	private ValueComparator bvc  = new ValueComparator(nameSum);
 	private TreeMap<String,Integer> sortedSum =  new TreeMap<String, Integer>(bvc);
+	private boolean hasChild;
+	private int winW;
 	
 	private FlareData temp;
 	private Integer values[];
-	private String keys[];
-	private Rectangle r;
-	private JSONArray cur,before,next;
-
-	private int index ,winW;
-	private boolean hasChild;
+	private String names[];
+	public Rectangle r;
 	
-	boolean flag;
-	
-	public Rect(org.json.JSONArray arr,int idx,int width) {
-		super(arr,idx);
+	public JSONArray cur;
+	public JSONObject obj;
 
+	public int index;
+	private int textNumber;
+	
+	static public int numberOfRect = -1;
+	
+	int state; // 0이 평상시 1이 클릭 2가 배경을 눌렀을 때
+	boolean clicked;
+	
+	public Rect(JSONArray arr,int width) {
+		numberOfRect++;
 		x = 80;
 		h = 32;
-		index = idx;
 		cur = arr; 
 		hasChild = true;
-		flag = false;
-		next = null;
-		before = null;
+		clicked = false;
+		y += numberOfRect*(h+10);
+		
 		winW = width;
 		
-		y += idx*(h+10);
+		state = 0;
 		
-		for (int i = 0 ; i < arr.length() ; i++) {
-			try {
-				temp = new FlareData(arr.getJSONObject(i));
-				
-				if (!temp.getObj().has("children"))
-					hasChild = false;
-				
-				name = temp.getObj().getString("name");
-				nameSum.put(name, temp.sum());
-			} catch (JSONException e) { e.printStackTrace(); }
+		try {
+			for (int i = 0 ; i < arr.length() ; i++) {
+					temp = new FlareData(arr.getJSONObject(i));
+					
+					if (!temp.getObj().has("children"))
+						hasChild = false;
+					
+					name = temp.getObj().getString("name");
+					nameSum.put(name, temp.sum());
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
 		}
 		
 		sortedSum.putAll(nameSum);
@@ -66,17 +74,35 @@ public class Rect extends FlareData {
 		MIN = Collections.min(sortedSum.values());
 		
 		values = sortedSum.values().toArray(new Integer[0]);
-		keys =  sortedSum.keySet().toArray(new String[0]);
+		names =  sortedSum.keySet().toArray(new String[0]);
 		
-		w = PApplet.map(values[idx],MIN,MAX,(width-200)/20,width-200);
+		w = PApplet.map(values[numberOfRect],MIN,MAX,(winW-200)/20,winW-200);
+		
+		Integer nameSumValues[] = nameSum.values().toArray(new Integer[0]);
+		
+		for (int i = 0 ; i <nameSumValues.length ; i++) {
+			if (values[numberOfRect] == nameSumValues[i]) {
+				index = i;
+				
+				try {
+					obj = arr.getJSONObject(i);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		textNumber = numberOfRect;
 		
 		r = new Rectangle(x,y,(int) w,h);
 	}
 	
-	void display(PApplet p) {
-		
+	public void display(PApplet p) {
 		p.fill(0);
-		p.text(keys[index], x-75, (y*2+h)/2);
+		
+		p.text(names[textNumber], x-75, (y*2+h)/2);
+		
+		//PApplet.println("number: "+index);
 		
 		if(hasChild)
 			p.fill(0,0,255);
@@ -86,10 +112,13 @@ public class Rect extends FlareData {
 		try {
 			if (r.contains(p.mouseX,p.mouseY) && p.mousePressed && cur.getJSONObject(index).has("children")) {
 				p.fill(255,0,0);
-				flag = true;
+				clicked = true;
+				state = 1;
 			}
 			else if (p.mousePressed) {
 				p.fill(0,255,0);
+				clicked = true;
+				//state = 2;
 			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -97,5 +126,9 @@ public class Rect extends FlareData {
 		}
 		
 		p.rect(r.x,r.y,r.width,r.height);
+	}
+	
+	public JSONObject getObj() {
+		return obj;
 	}
 }

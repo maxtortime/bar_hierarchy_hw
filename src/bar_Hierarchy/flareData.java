@@ -57,22 +57,28 @@ public class FlareData {
 		this.s.push(this.obj);
 	}
 
-	public int sum() throws JSONException {
-		dfs(this.obj);
-		
+	public int sum(){
 		int sum = 0;
 		
-		if (!each.isEmpty()) {
-			Iterator<String> it = this.each.keySet().iterator(); // Iterator 로 Key들을 뽑아낸다 
-	
-		    Object obj;
-		    while (it.hasNext()) {  // Key를 뽑아낸 Iterator 를 돌려가며
-		      obj = it.next(); // Key 를 하나씩 뽑아
-		      sum += this.each.get(obj);
-		    }
-		}
-		else {
-			sum = obj.getInt(SIZE);
+		try {
+			dfs(this.obj);
+			
+			if (!each.isEmpty()) {
+				Iterator<String> it = this.each.keySet().iterator(); // Iterator 로 Key들을 뽑아낸다 
+		
+			    Object obj;
+			    while (it.hasNext()) {  // Key를 뽑아낸 Iterator 를 돌려가며
+			      obj = it.next(); // Key 를 하나씩 뽑아
+			      sum += this.each.get(obj);
+			    }
+			}
+			else {
+				sum = obj.getInt(SIZE);
+			}
+		
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		return sum;
