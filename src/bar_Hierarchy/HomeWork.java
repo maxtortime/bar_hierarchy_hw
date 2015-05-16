@@ -59,7 +59,7 @@ public class HomeWork extends PApplet
 
 	public void draw()
 	{
-<<<<<<< HEAD
+
 		for(Rect r : rects) {
 			r.display(this);
 			
@@ -75,19 +75,7 @@ public class HomeWork extends PApplet
 		Rect.numberOfRect = -1;
 		
 		reload(clickedRect);
-=======
-		idx = -1;
-		
-		for (int i = 0 ; i< rects.size() ; i++) {
-			rects.get(i).display(this);
-		}
-	}
-	
-	public void mousePressed() {
-		redraw();
-		
-	
->>>>>>> 3e077c6938644425fd8e8c1d3cfe0b4fa2263592
+
 	}
 	
 	public void reload(Rect r) {
