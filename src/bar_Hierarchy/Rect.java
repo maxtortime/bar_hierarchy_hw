@@ -1,15 +1,17 @@
 package bar_Hierarchy;
+import java.awt.Rectangle;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.TreeMap;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import de.looksgood.ani.Ani;
 import processing.core.PApplet;
-
-import java.awt.Rectangle;
+import de.looksgood.ani.Ani;
 
 public class Rect {
 	private final int x = 80;
@@ -17,9 +19,10 @@ public class Rect {
 	private int y = 30;
 	private int MIN,MAX;
 	private TreeMap<String,Integer> nameSum = new TreeMap<String, Integer>();
-	private ValueComparator bvc  = new ValueComparator(nameSum);
-	private TreeMap<String,Integer> sortedSum =  new TreeMap<String, Integer>(bvc);
 	
+	private LinkedHashMap<String,Integer> sum = new LinkedHashMap<String, Integer>();
+	private ValueComparator bvc  = new ValueComparator(sum);
+	private TreeMap<String,Integer> sortedSum =  new TreeMap<String, Integer>(bvc);
 	private int winW;
 	private FlareData temp;
 	private Integer values[];
@@ -40,7 +43,9 @@ public class Rect {
 	
 	public Rect(JSONArray arr,int width) {
 		numberOfRect++;
-		cur = arr; 
+		cur = arr;
+		
+		ArrayList<String> temp1 = new ArrayList<String>();
 
 		y += numberOfRect*(h+10);
 		
@@ -50,13 +55,15 @@ public class Rect {
 			for (int i = 0 ; i < arr.length() ; i++) {
 					temp = new FlareData(arr.getJSONObject(i));
 					name = temp.getObj().getString("name");
+					temp1.add(name);
 					nameSum.put(name, temp.sum());
+					sum.put(name, temp.sum());
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 		
-		sortedSum.putAll(nameSum);
+		sortedSum.putAll(sum);
 		
 		MAX = Collections.max(sortedSum.values());
 		MIN = Collections.min(sortedSum.values());
@@ -66,7 +73,7 @@ public class Rect {
 		
 		w = PApplet.map(values[numberOfRect],MIN,MAX,(winW-200)/20,winW-200);
 		
-		Integer nameSumValues[] = nameSum.values().toArray(new Integer[0]);
+		Integer nameSumValues[] = sum.values().toArray(new Integer[0]);
 		
 		for (int i = 0 ; i <nameSumValues.length ; i++) {
 			if (values[numberOfRect] == nameSumValues[i]) {
