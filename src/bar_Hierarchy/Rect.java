@@ -6,61 +6,49 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import de.looksgood.ani.Ani;
 import processing.core.PApplet;
 
 import java.awt.Rectangle;
 
 public class Rect {
-	private final int x,h;
-	private int MIN;
-	private int MAX;
+	private final int x = 80;
+	private final int h = 32;
 	private int y = 30;
-	
-	public float w = 0;
-
-	private String name;
+	private int MIN,MAX;
 	private TreeMap<String,Integer> nameSum = new TreeMap<String, Integer>();
 	private ValueComparator bvc  = new ValueComparator(nameSum);
 	private TreeMap<String,Integer> sortedSum =  new TreeMap<String, Integer>(bvc);
-	private boolean hasChild;
-	private int winW;
 	
+	private int winW;
 	private FlareData temp;
 	private Integer values[];
 	private String names[];
-	public Rectangle r;
-	
-	public JSONArray cur;
-	public JSONObject obj;
-
-	public int index;
 	private int textNumber;
 	
-	static public int numberOfRect = -1;
+	public float w = 0;
+	public String name;
+	public Rectangle r;
+	public JSONArray cur;
+	public JSONObject obj;
+	public int index;
+	public static int numberOfRect = -1;
+	public boolean clicked = false;
+	public boolean hasChild = false;
 	
-	int state; // 0이 평상시 1이 클릭 2가 배경을 눌렀을 때
-	boolean clicked;
+	Ani widthAni;
 	
 	public Rect(JSONArray arr,int width) {
 		numberOfRect++;
-		x = 80;
-		h = 32;
 		cur = arr; 
-		hasChild = true;
-		clicked = false;
+
 		y += numberOfRect*(h+10);
 		
 		winW = width;
 		
-		state = 0;
-		
 		try {
 			for (int i = 0 ; i < arr.length() ; i++) {
 					temp = new FlareData(arr.getJSONObject(i));
-					
-					if (!temp.getObj().has("children"))
-						hasChild = false;
-					
 					name = temp.getObj().getString("name");
 					nameSum.put(name, temp.sum());
 			}
@@ -92,43 +80,34 @@ public class Rect {
 			}
 		}
 		
+		if (obj.has("children")) {
+			hasChild = true;
+		}
+		
 		textNumber = numberOfRect;
+		
+		name = names[textNumber];
 		
 		r = new Rectangle(x,y,(int) w,h);
 	}
 	
-	public void display(PApplet p) {
+	public void draw(PApplet p) {
 		p.fill(0);
 		
-		p.text(names[textNumber], x-75, (y*2+h)/2);
-		
-		//PApplet.println("number: "+index);
+		p.text(name, x-75, (y*2+h)/2);
 		
 		if(hasChild)
 			p.fill(70,130,180);
 		else
 			p.fill(170,170,170);
 		
-		try {
-			if (r.contains(p.mouseX,p.mouseY) && p.mousePressed && cur.getJSONObject(index).has("children")) {
-				p.fill(255,0,0);
-				clicked = true;
-				state = 1;
-			}
-			else if (p.mousePressed) {
-				p.fill(0,255,0);
-				clicked = true;
-				//state = 2;
-			}
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (r.contains(p.mouseX,p.mouseY) && p.mousePressed) {
+			p.fill(255,0,0);
+			clicked = true;
 		}
-		
+		else {
+			clicked = false;
+		}
 		p.rect(r.x,r.y,r.width,r.height);
-	}
-	
-	public JSONObject getObj() {
-		return obj;
 	}
 }

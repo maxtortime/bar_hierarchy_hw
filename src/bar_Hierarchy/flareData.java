@@ -134,8 +134,7 @@ public class FlareData {
 			}
 		}
 		catch(EmptyStackException e) {
-			// Depth First Search ends...
-			// do nothing
+			//e.printStackTrace();
 		}
 	}
 
