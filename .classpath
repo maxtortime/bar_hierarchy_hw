@@ -5,6 +5,6 @@
 	<classpathentry kind="lib" path="D:/DOCUMENT/VIS_HOMEWORK/FoxtailLib.jar"/>
 	<classpathentry kind="lib" path="D:/DOCUMENT/VIS_HOMEWORK/json-org.jar"/>
 	<classpathentry kind="lib" path="D:/DOCUMENT/ExternalJARS/processing_core.jar"/>
-	<classpathentry kind="lib" path="D:/DOWNLOAD/Ani-latest/Ani/library/Ani.jar"/>
+	<classpathentry kind="lib" path="D:/DOWNLOAD/Ani/library/Ani.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -68,68 +68,56 @@ public class HomeWork extends PApplet
 	{
 		background(255);
 		
+		//눈금 그리기
+		Rect MAXr = listHistory.peek().get(0);
+		int MAX = MAXr.getMax();
+		
+		for (int i = 0; i < 6; i++) {
+			fill(0);
+			int loc = MAXr.r.width+MAXr.r.x;
+			text(MAX-(MAX/6)*i,loc-(loc/6)*i,20);
+		}
+		
+		// 그래프 그리기
 		for(Rect r : listHistory.peek()) {
 			r.draw(this);
 			
 			if(r.clicked) clickedRect = r; // 사각형을 눌렀을 떄 어떤 사각형인지 알기 위해서임.
 		}
-		
-//		Rect MAX;
-//		// 눈금 출력
-//		if(rects!=null)
-//			MAX = rects.get(0); // 가장 큰 사각형
-//		else
-//			MAX = beRect.get(0); 
-//		
-//		
-//		fill(0);
-//		text(0,80,20);
-//		
-//		for (int i = 0; i < 5; i++) {
-//			text((MAX.w-(MAX.w/5)*i)+"K" //천자리로 끊어서 
-//					,(MAX.r.width+MAX.r.x)-((MAX.r.width+MAX.r.x)/5)*i,
-//					20);
-//		}
 	}
 	public void mouseClicked() {
 		if(clickedRect!=null && clickedRect.hasChild) { // 사각형 눌렀을 때
-			// do something
-			Rect.numberOfRect = -1;
+			Rect.numberOfRect = -1; // 그려져 있는 사각형의 수 초기화
 		
 			try {
-				JSONArray next = clickedRect.obj.getJSONArray("children");
+				JSONArray next = clickedRect.getObj().getJSONArray("children");
 				ArrayList<Rect> nextList = new ArrayList<Rect>();
 				
 				for (int i = 0; i < next.length(); i++)
 					nextList.add(new Rect(next,width));
 				
-				listHistory.push(nextList);
-				println("PUSH");
+				// 다음 층 그래프 그리기
+				listHistory.push(nextList); 
 				redraw();
 			} catch (JSONException e) { e.printStackTrace(); }
 			
 			//debug 용 출력
-			println("클릭한 사각형 이름: "+clickedRect.name);
-			println("사각형 index: "+clickedRect.index);
+			//println("클릭한 사각형 이름: "+clickedRect.name);
+			//println("사각형 index: "+clickedRect.index);
 			
 			clickedRect = null; // 다음에 눌렀을 때 새로운 상태로 초기화하기 위해서
 		}
-		else if (clickedRect!=null && !clickedRect.hasChild) {
+		else if (clickedRect!=null && !clickedRect.hasChild) { // 다음 depth가 없는 막대를 누르면 아무것도 안 하기 위해
 			redraw();
+			
 			println("아무 것도 안 함");
-			clickedRect = null;
+			clickedRect = null; // 다음에 눌렀을 때 새로운 상태로 초기화하기 위해서
 		}
 		else if (clickedRect==null) { // 배경을 눌렀을 때
-			//do something..
-			
-			if (listHistory.peek().get(0).cur!=curDepth) { // 처음에는 뒤로 갈 필요가 없음
+			if (listHistory.peek()!=rects) { // 맨 처음에는 뒤로 갈 필요가 없음
 				listHistory.pop();
-				println("POP 위로");
 				redraw();
 			}
-			
-			//debug 용 출력
-			println("사각형 클릭 안 함");
 		}
 		redraw();
 	}

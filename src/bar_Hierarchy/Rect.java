@@ -1,8 +1,6 @@
 package bar_Hierarchy;
 import java.awt.Rectangle;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.TreeMap;
 
@@ -18,9 +16,9 @@ public class Rect {
 	private final int h = 32;
 	private int y = 30;
 	private int MIN,MAX;
-	private TreeMap<String,Integer> nameSum = new TreeMap<String, Integer>();
 	
-	private LinkedHashMap<String,Integer> sum = new LinkedHashMap<String, Integer>();
+	private LinkedHashMap<String,Integer> sum = new LinkedHashMap<String, Integer>(); 
+	// TreeMap이 put할 때 이상하게 정렬되서 LinkedHashMap으로 함.
 	private ValueComparator bvc  = new ValueComparator(sum);
 	private TreeMap<String,Integer> sortedSum =  new TreeMap<String, Integer>(bvc);
 	private int winW;
@@ -29,24 +27,22 @@ public class Rect {
 	private String names[];
 	private int textNumber;
 	
-	public float w = 0;
-	public String name;
+	private float w = 0;
+	private String name;
 	public Rectangle r;
-	public JSONArray cur;
-	public JSONObject obj;
-	public int index;
+	
+	private JSONObject obj;
+	private int index;
+	
 	public static int numberOfRect = -1;
 	public boolean clicked = false;
 	public boolean hasChild = false;
 	
-	Ani widthAni;
+	Ani rectAni;
 	
 	public Rect(JSONArray arr,int width) {
 		numberOfRect++;
-		cur = arr;
 		
-		ArrayList<String> temp1 = new ArrayList<String>();
-
 		y += numberOfRect*(h+10);
 		
 		winW = width;
@@ -55,8 +51,7 @@ public class Rect {
 			for (int i = 0 ; i < arr.length() ; i++) {
 					temp = new FlareData(arr.getJSONObject(i));
 					name = temp.getObj().getString("name");
-					temp1.add(name);
-					nameSum.put(name, temp.sum());
+
 					sum.put(name, temp.sum());
 			}
 		} catch (JSONException e) {
@@ -80,19 +75,17 @@ public class Rect {
 				index = i;
 				
 				try {
-					obj = arr.getJSONObject(i);
+					obj = arr.getJSONObject(index);
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
 			}
 		}
 		
-		if (obj.has("children")) {
-			hasChild = true;
-		}
+		if (obj.has("children")) hasChild = true;
+		else hasChild = false;
 		
 		textNumber = numberOfRect;
-		
 		name = names[textNumber];
 		
 		r = new Rectangle(x,y,(int) w,h);
@@ -111,10 +104,20 @@ public class Rect {
 		if (r.contains(p.mouseX,p.mouseY) && p.mousePressed) {
 			p.fill(255,0,0);
 			clicked = true;
+			
 		}
 		else {
 			clicked = false;
 		}
 		p.rect(r.x,r.y,r.width,r.height);
+	}
+
+	public JSONObject getObj() {
+		// TODO Auto-generated method stub
+		return obj;
+	}
+	
+	public int getMax() {
+		return MAX;
 	}
 }
