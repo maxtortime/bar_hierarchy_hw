@@ -14,9 +14,9 @@ public class Rect {
 	private final int x,h;
 	private int MIN;
 	private int MAX;
-	private int y = 10;
+	private int y = 30;
 	
-	private float w = 0;
+	public float w = 0;
 
 	private String name;
 	private TreeMap<String,Integer> nameSum = new TreeMap<String, Integer>();
@@ -105,9 +105,9 @@ public class Rect {
 		//PApplet.println("number: "+index);
 		
 		if(hasChild)
-			p.fill(0,0,255);
+			p.fill(70,130,180);
 		else
-			p.fill(0);
+			p.fill(170,170,170);
 		
 		try {
 			if (r.contains(p.mouseX,p.mouseY) && p.mousePressed && cur.getJSONObject(index).has("children")) {

@@ -52,14 +52,12 @@ public class HomeWork extends PApplet
 		
 		for (int i = 0 ; i < curDepth.length() ; i++) {
 			rects.add(new Rect(curDepth, width));
-			
 		}
 		
 	}
 
 	public void draw()
 	{
-
 		for(Rect r : rects) {
 			r.display(this);
 			
@@ -70,15 +68,18 @@ public class HomeWork extends PApplet
 				clickedBack = r;
 			}
 		}
+		
+		fill(0);
+		text(0,80,20);
+		text(rects.get(0).w,rects.get(0).r.width+rects.get(0).r.x,20);
 	}
 	public void mouseClicked() {
-		Rect.numberOfRect = -1;
-		
 		reload(clickedRect);
-
 	}
 	
 	public void reload(Rect r) {
+		Rect.numberOfRect = -1;
+		
 		if (r==null) { // 막대를 눌렀을 때
 			if (!(clickedBack.cur == curDepth)) {
 				background(255);
