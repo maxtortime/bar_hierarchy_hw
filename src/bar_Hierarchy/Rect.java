@@ -48,25 +48,17 @@ public class Rect {
 		
 		winW = width;
 		
-//		try {
-//			for (int i = 0 ; i < arr.length() ; i++)
-//					temp = new FlareData(arr.getJSONObject(i));
-//					//name = temp.getObj().getString("name");
-//
-//					//sum.put(name, temp.sum());
-//		
-//		} catch (JSONException e) {
-//			e.printStackTrace();
-//		}
-		
 		try {
-			temp = new FlareData(arr.getJSONObject(numberOfRect));
-		} catch (JSONException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			for (int i = 0 ; i < arr.length() ; i++) {
+					temp = new FlareData(arr.getJSONObject(i));
+					name = temp.getObj().getString("name");
+
+					sum.put(name, temp.sum());
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
 		}
 		
-		sum = temp.getEach();
 		sortedSum.putAll(sum);
 		
 		MAX = Collections.max(sortedSum.values());
