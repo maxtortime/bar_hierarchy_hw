@@ -1,4 +1,5 @@
 package bar_Hierarchy;
+
 import java.awt.Rectangle;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -9,11 +10,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import processing.core.PApplet;
-import de.looksgood.ani.Ani;
+import seltar.motion.*;
 
 public class Rect {
 	private final int x = 80;
-	private final int h = 32;
+	public final int h = 32;
 	private int y = 30;
 	private int MIN,MAX;
 	
@@ -22,7 +23,7 @@ public class Rect {
 	private ValueComparator bvc  = new ValueComparator(sum);
 	private TreeMap<String,Integer> sortedSum =  new TreeMap<String, Integer>(bvc);
 	private int winW;
-	private FlareData temp;
+	private FlareData temp;	
 	private Integer values[];
 	private String names[];
 	private int textNumber;
@@ -38,8 +39,8 @@ public class Rect {
 	public boolean clicked = false;
 	public boolean hasChild = false;
 	
-	Ani rectAni;
-	
+	Motion m;
+
 	public Rect(JSONArray arr,int width) {
 		numberOfRect++;
 		
@@ -89,9 +90,12 @@ public class Rect {
 		name = names[textNumber];
 		
 		r = new Rectangle(x,y,(int) w,h);
+		
+		m = new Motion(0,y);
 	}
 	
 	public void draw(PApplet p) {
+		move();
 		p.fill(0);
 		
 		p.text(name, x-75, (y*2+h)/2);
@@ -109,7 +113,8 @@ public class Rect {
 		else {
 			clicked = false;
 		}
-		p.rect(r.x,r.y,r.width,r.height);
+		//p.rect(r.x,r.y,r.width,r.height);
+		p.rect(r.x,r.y,m.getX(),r.height);
 	}
 
 	public JSONObject getObj() {
@@ -119,5 +124,10 @@ public class Rect {
 	
 	public int getMax() {
 		return MAX;
+	}
+	
+	public void move() {
+		m.followTo(r.width, r.y);
+		m.move();
 	}
 }

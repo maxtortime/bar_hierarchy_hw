@@ -25,7 +25,6 @@ public class FlareData {
 	private LinkedHashMap <String,Integer> each = new LinkedHashMap<String,Integer>();
 	private Vector <JSONObject> nodes = new Vector<JSONObject>();
 
-	
 	public FlareData(String fileName)
 	{
 		jsonFile = FTFile.Read(fileName);

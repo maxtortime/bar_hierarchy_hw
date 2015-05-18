@@ -11,8 +11,6 @@ import net.foxtail.file.FTFile;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import de.looksgood.ani.Ani;
 import processing.core.PApplet;
 
 @SuppressWarnings("serial")
@@ -36,8 +34,6 @@ public class HomeWork extends PApplet
 		textSize(12);
 		background(255);
 		
-		Ani.init(this);
-		
 		String s = FTFile.Read("../flare.json");
 		
 		clickWhat = 0;
@@ -47,6 +43,7 @@ public class HomeWork extends PApplet
 		clickedRect = null;
 		
 		listHistory = new Stack<ArrayList<Rect>>();
+		
 		
 		try {
 			obj = new JSONObject(s);
@@ -75,7 +72,7 @@ public class HomeWork extends PApplet
 		for (int i = 0; i < 6; i++) {
 			fill(0);
 			int loc = MAXr.r.width+MAXr.r.x;
-			text(MAX-(MAX/6)*i,loc-(loc/6)*i,20);
+			text(round((MAX-(MAX/6)*i)/1000)+"K",loc-(loc/6)*i,20);
 		}
 		
 		// 그래프 그리기
@@ -120,5 +117,9 @@ public class HomeWork extends PApplet
 			}
 		}
 		redraw();
+	}
+	
+	public static void main(String args[]) {
+		 PApplet.main("HomeWork");
 	}
 }
