@@ -5,9 +5,7 @@ package bar_Hierarchy;
 
 import java.util.ArrayList;
 import java.util.Stack;
-
 import net.foxtail.file.FTFile;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,7 +41,6 @@ public class HomeWork extends PApplet
 		clickedRect = null;
 		
 		listHistory = new Stack<ArrayList<Rect>>();
-		
 		
 		try {
 			obj = new JSONObject(s);
@@ -98,10 +95,6 @@ public class HomeWork extends PApplet
 				redraw();
 			} catch (JSONException e) { e.printStackTrace(); }
 			
-			//debug 용 출력
-			//println("클릭한 사각형 이름: "+clickedRect.name);
-			//println("사각형 index: "+clickedRect.index);
-			
 			clickedRect = null; // 다음에 눌렀을 때 새로운 상태로 초기화하기 위해서
 		}
 		else if (clickedRect!=null && !clickedRect.hasChild) { // 다음 depth가 없는 막대를 누르면 아무것도 안 하기 위해
@@ -119,7 +112,5 @@ public class HomeWork extends PApplet
 		redraw();
 	}
 	
-	public static void main(String args[]) {
-		 PApplet.main("HomeWork");
-	}
+	
 }
