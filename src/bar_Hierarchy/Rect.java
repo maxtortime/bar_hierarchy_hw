@@ -62,7 +62,11 @@ public class Rect {
 		sortedSum.putAll(sum);
 		
 		MAX = Collections.max(sortedSum.values());
-		MIN = Collections.min(sortedSum.values());
+		
+		if (sum.size() != 1) // 원소가 1개이면 나중에 MIN과 MAX가 같아져서 w가 0이되므로
+			MIN = Collections.min(sortedSum.values());
+		else
+			MIN = 0;
 		
 		values = sortedSum.values().toArray(new Integer[0]);
 		names =  sortedSum.keySet().toArray(new String[0]);
