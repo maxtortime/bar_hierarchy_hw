@@ -155,8 +155,13 @@ public class FlareData {
 	 * @return the each
 	 * @throws JSONException 
 	 */
-	public LinkedHashMap<String, Integer> getEach() throws JSONException {
-		dfs(this.obj);
+	public LinkedHashMap<String, Integer> getEach() {
+		try {
+			dfs(this.obj);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return each;
 	}
 
