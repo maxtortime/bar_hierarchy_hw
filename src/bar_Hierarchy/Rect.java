@@ -13,7 +13,7 @@ import processing.core.PApplet;
 import seltar.motion.*;
 
 public class Rect {
-	private final int x = 80;
+	private final int x = 150;
 	public final int h = 32;
 	private int y = 30;
 	private int MIN,MAX;
@@ -102,7 +102,7 @@ public class Rect {
 		move();
 		p.fill(0);
 		
-		p.text(name, x-75, (y*2+h)/2);
+		p.text(name, x-125, (y*2+h)/2);
 		
 		if(hasChild)
 			p.fill(70,130,180);
