@@ -2,9 +2,9 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="D:/DOCUMENT/VIS_HOMEWORK/FoxtailLib.jar"/>
-	<classpathentry kind="lib" path="D:/DOCUMENT/VIS_HOMEWORK/json-org.jar"/>
-	<classpathentry kind="lib" path="D:/DOCUMENT/VIS_HOMEWORK/processing_core.jar"/>
-	<classpathentry kind="lib" path="D:/DOCUMENT/ExternalJARS/motion.jar"/>
+	<classpathentry kind="lib" path="D:/Workspace/bar_Hierarchy/exJAR/FoxtailLib.jar"/>
+	<classpathentry kind="lib" path="D:/Workspace/bar_Hierarchy/exJAR/json-org.jar"/>
+	<classpathentry kind="lib" path="D:/Workspace/bar_Hierarchy/exJAR/motion.jar"/>
+	<classpathentry kind="lib" path="D:/Workspace/bar_Hierarchy/exJAR/processing_core.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
